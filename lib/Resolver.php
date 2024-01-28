@@ -135,7 +135,7 @@ class Resolver
         $alternatives = null;
         foreach ($results as $item) {
             if ($item['tld'] == $main_tld) {
-                $requested = $item
+                $requested = $item;
             } else {
                 $alternatives[] = $item;
             }
