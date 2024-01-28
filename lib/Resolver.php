@@ -106,7 +106,7 @@ class Resolver
 
         $results = [];
         foreach ($all_tlds as $ltd) {
-            $d = $domain_part . $ltd;
+            $d = $domain_part . '.' . $ltd;
             $res = localAPI('DomainWhois', array(
                 'domain' => $d
             ));
