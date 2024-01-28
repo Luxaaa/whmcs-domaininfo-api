@@ -136,6 +136,7 @@ class Resolver
             } else {
                 foreach ($alternative_results as $alt_item) {
                     if(('.' . ($alt_item['tld'])) == $item['tld']) {
+                        echo $item['registration'];
                         $alt_item['registration_price'] = $item['registration'];
                         $alt_item['transfer_price'] = $item['transfer'];
                     }
