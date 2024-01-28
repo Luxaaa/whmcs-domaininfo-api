@@ -93,11 +93,11 @@ class Resolver
         $alternative_tlds = $params['alternative_tlds']  ?: [];
         
         
-        $result = localAPI('DomainWhois', array(
+        $main_whois = localAPI('DomainWhois', array(
             'domain' => $domain
         ));
 
-        if ($result['result'] != 'success') {
+        if ($main_whois['result'] != 'success') {
             return $this->createJSONResponse(['status' => 'error', 'message' => 'Invalid domain'], 404);
         }
 
@@ -105,7 +105,7 @@ class Resolver
         $tld = implode('.', array_slice($domain_parts, -(sizeof($domain_parts) -1)));
         $domain_part = $domain_parts[0];
         
-        $alternative_results = [];
+        $alternative_whois = [];
         foreach ($alternative_tlds as $alt_tld) {
             $alt_domain = $domain_part . '.' . $alt_tld;
             $alt_result = localAPI('DomainWhois', array(
@@ -116,10 +116,10 @@ class Resolver
                 return $this->createJSONResponse(['status' => 'error', 'message' => 'Invalid domain'], 404);
             }
             
-            $alternative_results[] = [
+            $alternative_whois[] = [
                 'domain' => $alt_domain,
                 'tld' => $alt_tld,
-                'domain_available' => $alt_result['status'] == 'available',
+                'is_available' => $alt_result['status'] == 'available',
             ];
         }
         
@@ -130,15 +130,20 @@ class Resolver
         ])['items'];
         
         $mainDetails = null;
+        $alternative_results = [];
+
         foreach ($pricingDetails as $item) {
             if ($item['tld'] == ( '.' . $tld)) {
                 $mainDetails = $item;
             } else {
-                foreach ($alternative_results as $alt_item) {
+                foreach ($alternative_whois as $alt_item) {
                     if(('.' . ($alt_item['tld'])) == $item['tld']) {
-                        echo $item['registration'];
-                        $alt_item['registration_price'] = $item['registration'];
-                        $alt_item['transfer_price'] = $item['transfer'];
+                        $alternative_results[] = [
+                            'domain' => $alt_item['domain'],
+                            "is_available" => $alt_item['is_available'],
+                            'registration_price' => $item['registration'],
+                            'transfer_price' => $item['transfer'],
+                        ];
                     }
                 }
             }
@@ -150,7 +155,7 @@ class Resolver
             'status' => 'success',
             'domain' => $domain,
             'tld' => $tld,
-            'domain_available' =>  $result['status'] == 'available',
+            'is_available' =>  $main_whois['status'] == 'available',
             'registration_price' => $mainDetails['registration'],
             'transfer_price' => $mainDetails['transfer'],
             'alternatives' => $alternative_results
