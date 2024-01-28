@@ -42,7 +42,8 @@ class Resolver {
         $items = [];
         foreach ($zipped as $tld) {
             if(!empty($selection)) {
-                if (!in_array($tld[0]->extension, $selection)) {
+                $plain_tld = ltrim($tld[0]->extension, '.');
+                if (!in_array('.' . $plain_tld, $selection)) {
                     continue;
                 }
             }
