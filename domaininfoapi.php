@@ -1,9 +1,13 @@
 <?php
 
+use WHMCS\Module\Addon\DomainInfoAPI\Resolver;
+
+
 if (!defined("WHMCS")) {
     die("This file cannot be accessed directly");
 }
 
+zse
 
 function domaininfoapi_config()
 {
@@ -33,7 +37,8 @@ function domaininfoapi_deactivate() {
 // function for the public api
 function domaininfoapi_clientarea($vars) {
 
-    echo "Test";
+    $resolver = new Resolver();
+    echo $resolver->test();
     exit;
 }
 
