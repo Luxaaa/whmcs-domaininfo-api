@@ -140,6 +140,7 @@ class Resolver
                     if(('.' . ($alt_item['tld'])) == $item['tld']) {
                         $alternative_results[] = [
                             'domain' => $alt_item['domain'],
+                            'tld' => $alt_item['tld'],
                             "is_available" => $alt_item['is_available'],
                             'registration_price' => $item['registration'],
                             'transfer_price' => $item['transfer'],
