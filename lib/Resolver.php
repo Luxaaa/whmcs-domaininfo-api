@@ -134,6 +134,8 @@ class Resolver
                 $mainDetails = $item;
             } 
         }
+
+        echo 'tld is ' . $tld;
         
 
         $resp = [
