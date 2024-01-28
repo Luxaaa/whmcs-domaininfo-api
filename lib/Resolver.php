@@ -135,7 +135,7 @@ class Resolver
             'domain_available' =>  $result['status'] == 'available',
             'registration_price' => $pricingDetails['registration'],
             'transfer_price' => $pricingDetails['transfer'],
-            'alternative': $alternative_results
+            'alternative' => $alternative_results
         ];
         
         return $this->createJSONResponse($resp);
