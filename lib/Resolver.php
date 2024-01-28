@@ -17,6 +17,10 @@ class Resolver {
     }
 
     function domainPricing($params) {
+        // get parameters
+        $selection = $params['selection'];
+
+
         $tlds_registration = Capsule::table('tbldomainpricing')
             ->join('tblpricing', 'tbldomainpricing.id', '=', 'tblpricing.relid')
             ->select('tbldomainpricing.id', 'tbldomainpricing.extension', 'tblpricing.msetupfee')
@@ -37,6 +41,12 @@ class Resolver {
         $zipped = array_map(null, $tlds_registration, $tlds_transfer, $tlds_renew);
         $items = [];
         foreach ($zipped as $tld) {
+            if(!empty($selection)) {
+                if (!in_array($tld[0]->extension, $selection)) {
+                    continue;
+                }
+            }
+
             $items[] = [
                 'tld' => $tld[0]->extension,
                 'registration' => $tld[0]->msetupfee,
@@ -49,7 +59,6 @@ class Resolver {
             'status' => 'success',
             'items' => $items,
         ];
-        
         return $this->createJSONResponse($result);
     }
 
