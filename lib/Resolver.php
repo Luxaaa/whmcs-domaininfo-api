@@ -42,8 +42,10 @@ class Resolver {
         $items = [];
         foreach ($zipped as $tld) {
             if(!empty($selection)) {
-                $plain_tld = ltrim($tld[0]->extension, '.');
-                if (!in_array('.' . $plain_tld, $selection)) {
+                // add leading point if not exists
+                $ltd = $tld[0]->extension;
+                if ($ltd[0] != '.') $ltd = '.' . $ltd;
+                if (!in_array($ltd, $selection)) {
                     continue;
                 }
             }
