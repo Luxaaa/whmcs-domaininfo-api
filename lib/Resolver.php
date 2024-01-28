@@ -45,6 +45,7 @@ class Resolver {
                 // add leading point if not exists
                 $ltd = $tld[0]->extension;
                 if ($ltd[0] != '.') $ltd = '.' . $ltd;
+                echo $ltd;
                 if (!in_array($ltd, $selection)) {
                     continue;
                 }
