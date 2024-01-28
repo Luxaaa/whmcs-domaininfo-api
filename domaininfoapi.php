@@ -33,9 +33,7 @@ function domaininfoapi_deactivate() {
 // function for the public api
 function domaininfoapi_clientarea($vars) {
 
-    return [
-        'status' => 'success',
-    ];
+    echo "Test";
 
 }
 
