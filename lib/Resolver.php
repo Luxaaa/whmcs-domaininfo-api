@@ -130,10 +130,10 @@ class Resolver
         
         $mainDetails = null;
         foreach ($pricingDetails as $item) {
-            echo $item->tld;
+            echo $item['tld'];
             echo ' ';
             echo 'tld: ' .  $tld;
-            if ($item->tld == ( $tld)) {
+            if ($item['tld'] == ( $tld)) {
                 
                 $mainDetails = $item;
             } 
