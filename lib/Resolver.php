@@ -19,22 +19,22 @@ class Resolver {
     function domainPricing($params) {
         // get parameters
         $selection = $params['selection'];
-
-
+        $groups = $params['groups'];
+        
         $tlds_registration = Capsule::table('tbldomainpricing')
             ->join('tblpricing', 'tbldomainpricing.id', '=', 'tblpricing.relid')
-            ->select('tbldomainpricing.id', 'tbldomainpricing.extension', 'tblpricing.msetupfee')
+            ->select('tbldomainpricing.id', 'tbldomainpricing.extension', 'tbldomainpricing.group', 'tblpricing.msetupfee')
             ->where('tblpricing.type', '=', 'domainregister')
             ->get()->toArray();
         $tlds_transfer = Capsule::table('tbldomainpricing')
             ->join('tblpricing', 'tbldomainpricing.id', '=', 'tblpricing.relid')
-            ->select('tbldomainpricing.id', 'tbldomainpricing.extension', 'tblpricing.msetupfee')
+            ->select('tbldomainpricing.id', 'tbldomainpricing.extension', 'tbldomainpricing.group', 'tblpricing.msetupfee')
             ->where('tblpricing.type', '=', 'domaintransfer')
             ->get()->toArray();
         // above query only returns the transfer price, so we need to get the renew prices as well
         $tlds_renew = Capsule::table('tbldomainpricing')
             ->join('tblpricing', 'tbldomainpricing.id', '=', 'tblpricing.relid')
-            ->select('tbldomainpricing.id', 'tbldomainpricing.extension', 'tblpricing.msetupfee')
+            ->select('tbldomainpricing.id', 'tbldomainpricing.extension', 'tbldomainpricing.group', 'tblpricing.msetupfee')
             ->where('tblpricing.type', '=', 'domainrenew')
             ->get()->toArray();
 
@@ -51,6 +51,7 @@ class Resolver {
 
             $items[] = [
                 'tld' => $tld[0]->extension,
+                'group' => $tld[0]->group ? $tld[0]->group : null,
                 'registration' => $tld[0]->msetupfee,
                 'transfer' => $tld[1]->msetupfee,
                 'renew' => $tld[2]->msetupfee
