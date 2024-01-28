@@ -140,6 +140,7 @@ class Resolver
                     echo  $item['tld'];
                     echo '   ';
                     if(('.' . ($alt_item['tld'])) == $item['tld']) {
+                        echo "match";
                         $alt_item['registration_price'] = $item['registration'];
                         $alt_item['transfer_price'] = $item['transfer'];
                     }
