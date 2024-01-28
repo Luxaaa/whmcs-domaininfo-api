@@ -130,7 +130,7 @@ class Resolver
         
         $mainDetails = null;
         foreach ($pricingDetails as $item) {
-            if ($item->tld == ('.' . $tld)) {
+            if ($item->tld == ( $tld)) {
                 $mainDetails = $item;
             } 
         }
