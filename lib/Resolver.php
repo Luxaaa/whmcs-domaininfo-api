@@ -128,9 +128,9 @@ class Resolver
             'returnDataDirectly' => true,
         ])['items'];
         
-        $mainDetails = $pricingDetails[0];
+        $mainDetails = null;
         foreach ($pricingDetails as $item) {
-            if ($item->extension == ('.' . $tld)) {
+            if ($item->tld == ('.' . $tld)) {
                 $mainDetails = $item;
             } 
         }
