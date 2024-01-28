@@ -131,7 +131,7 @@ class Resolver
         $mainDetails = null;
         foreach ($pricingDetails as $item) {
             if ($item->extension == $tld) {
-                $mainDetails = $item
+                $mainDetails = $item;
             } 
         }
         
