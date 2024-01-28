@@ -131,6 +131,9 @@ class Resolver
         $mainDetails = null;
         foreach ($pricingDetails as $item) {
             if ($item->tld == ( $tld)) {
+                echo $item->tld;
+                echo $tld;
+                echo '\n';
                 $mainDetails = $item;
             } 
         }
