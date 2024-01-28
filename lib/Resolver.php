@@ -118,6 +118,7 @@ class Resolver
             
             $alternative_results[] = [
                 'domain' => $alt_domain,
+                'tld' => $alt_tld,
                 'domain_available' => $alt_result['status'] == 'available',
             ];
         }
@@ -132,13 +133,22 @@ class Resolver
         foreach ($pricingDetails as $item) {
             if ($item['tld'] == ( '.' . $tld)) {
                 $mainDetails = $item;
-            } 
+            } else {
+                foreach ($alternative_results as $alt_item) {
+                    if($alt_item['tld'] == $item['tld']) {
+                        $alt_item['registration_price'] = $item['registration'];
+                        $alt_item['transfer_price'] = $item['transfer'];
+                    }
+                }
+            }
+
         }
 
         
         $resp = [
             'status' => 'success',
             'domain' => $domain,
+            'tld' => $tld,
             'domain_available' =>  $result['status'] == 'available',
             'registration_price' => $mainDetails['registration'],
             'transfer_price' => $mainDetails['transfer'],
