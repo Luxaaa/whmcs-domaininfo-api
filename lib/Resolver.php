@@ -34,17 +34,14 @@ class Resolver {
             ->where('tblpricing.type', '=', 'domainrenew')
             ->get();
 
-
-
-
-
+        $zipped = array_map(null, $tlds_registration, $tlds_transfer, $tlds_renew);
         $items = [];
-        foreach ($tlds_registration as $tld) {
+        foreach ($zipped as $tld) {
             $items[] = [
-                'tld' => $tld->extension,
-                'registration' => $tld->msetupfee,
-                'transfer' => 0, // $tlds_transfer->where('extension', $tld->extension)->first()->msetupfee,
-                'renew' => 0 //  $tlds_renew->where('extension', $tld->extension)->first()->msetupfee,
+                'tld' => $tld[0]->extension,
+                'registration' => $tld[0]->msetupfee,
+                'transfer' => $tld[1]->msetupfee,
+                'renew' => $tld[2]->msetupfee
             ];
         }
         
