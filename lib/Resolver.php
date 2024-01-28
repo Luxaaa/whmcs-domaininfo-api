@@ -21,18 +21,18 @@ class Resolver {
             ->join('tblpricing', 'tbldomainpricing.id', '=', 'tblpricing.relid')
             ->select('tbldomainpricing.id', 'tbldomainpricing.extension', 'tblpricing.msetupfee')
             ->where('tblpricing.type', '=', 'domainregister')
-            ->get();
+            ->get()->toArray();
         $tlds_transfer = Capsule::table('tbldomainpricing')
             ->join('tblpricing', 'tbldomainpricing.id', '=', 'tblpricing.relid')
             ->select('tbldomainpricing.id', 'tbldomainpricing.extension', 'tblpricing.msetupfee')
             ->where('tblpricing.type', '=', 'domaintransfer')
-            ->get();
+            ->get()->toArray();
         // above query only returns the transfer price, so we need to get the renew prices as well
         $tlds_renew = Capsule::table('tbldomainpricing')
             ->join('tblpricing', 'tbldomainpricing.id', '=', 'tblpricing.relid')
             ->select('tbldomainpricing.id', 'tbldomainpricing.extension', 'tblpricing.msetupfee')
             ->where('tblpricing.type', '=', 'domainrenew')
-            ->get();
+            ->get()->toArray();
 
         $zipped = array_map(null, $tlds_registration, $tlds_transfer, $tlds_renew);
         $items = [];
