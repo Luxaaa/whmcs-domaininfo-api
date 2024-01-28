@@ -98,6 +98,8 @@ class Resolver
         // get tld from domain
         $tld = substr($domain, strpos($domain, '.') + 1);
         $tld = explode('.', $tld);
+        $tld = implode('.', array_slice($tld, 1));
+        
 
         
         
