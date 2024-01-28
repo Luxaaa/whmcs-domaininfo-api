@@ -91,80 +91,64 @@ class Resolver
     {
         $domain = $params['domain'];
         $alternative_tlds = $params['alternative_tlds']  ?: [];
-        
-        
-        $main_whois = localAPI('DomainWhois', array(
-            'domain' => $domain
-        ));
-
-        if ($main_whois['result'] != 'success') {
-            return $this->createJSONResponse(['status' => 'error', 'message' => 'Invalid domain'], 404);
-        }
 
         $domain_parts = explode('.', $domain);
-        $tld = implode('.', array_slice($domain_parts, -(sizeof($domain_parts) -1)));
         $domain_part = $domain_parts[0];
-        
-        $alternative_whois = [];
-        foreach ($alternative_tlds as $alt_tld) {
-            $alt_domain = $domain_part . '.' . $alt_tld;
-            $alt_result = localAPI('DomainWhois', array(
-                'domain' => $alt_domain
-            ));
+        $main_tld = implode('.', array_slice($domain_parts, -(sizeof($domain_parts) -1)));
 
-            if ($alt_result['result'] != 'success') {
-                return $this->createJSONResponse(['status' => 'error', 'message' => 'Invalid domain'], 404);
-            }
-            
-            $alternative_whois[] = [
-                'domain' => $alt_domain,
-                'tld' => $alt_tld,
-                'is_available' => $alt_result['status'] == 'available',
-            ];
-        }
-        
-        
+        $all_tlds = array_unique([$main_tld, ...$alternative_tlds]);
+
+
         $pricingDetails = $this->domainPricing([
-            'selection' => [$tld, ...$alternative_tlds],
+            'selection' => $all_tlds,
             'returnDataDirectly' => true,
         ])['items'];
-        
-        $mainDetails = null;
-        $alternative_results = [];
 
-        foreach ($pricingDetails as $item) {
-            if ($item['tld'] == ( '.' . $tld)) {
-                $mainDetails = $item;
-            } else {
-                foreach ($alternative_whois as $alt_item) {
-                    if(('.' . ($alt_item['tld'])) == $item['tld']) {
-                        $alternative_results[] = [
-                            'domain' => $alt_item['domain'],
-                            'tld' => $alt_item['tld'],
-                            "is_available" => $alt_item['is_available'],
-                            'registration_price' => $item['registration'],
-                            'transfer_price' => $item['transfer'],
-                        ];
-                    }
+        $results = [];
+        foreach ($all_tlds as $ltd) {
+            $d = $domain_part . $ltd;
+            $res = localAPI('DomainWhois', array(
+                'domain' => $d
+            ));
+
+            if ($res['result'] != 'success') {
+                return $this->createJSONResponse(['status' => 'error', 'message' => 'Invalid domain'], 404);
+            }
+
+            $pricing = null;
+            foreach ($pricingDetails as $pricing_item) {
+                if (('.' . $ltd) == $pricing_item['tld']) {
+                    $pricing = $pricing_item;
                 }
             }
 
+            $results[] = [
+                'domain' => $d,
+                'tld' => $ltd,
+                'is_available' => $res['status'] == 'available',
+                'pricing' => $pricing
+            ];
+
+        }
+
+        $requested = null;
+        $alternatives = null;
+        foreach ($results as $item) {
+            if ($item['tld'] == $main_tld) {
+                $requested = $item
+            } else {
+                $alternatives[] = $item;
+            }
         }
 
         
         $resp = [
             'status' => 'success',
-            'domain' => $domain,
-            'tld' => $tld,
-            'is_available' =>  $main_whois['status'] == 'available',
-            'registration_price' => $mainDetails['registration'],
-            'transfer_price' => $mainDetails['transfer'],
-            'alternatives' => $alternative_results
+            'domain' => $requested,
+            "alternatives" => $alternatives
         ];
         
         return $this->createJSONResponse($resp);
-
-
     }
 
     function resolve($params)
