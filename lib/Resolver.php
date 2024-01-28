@@ -90,7 +90,7 @@ class Resolver
     function domainStatus($params)
     {
         $domain = $params['domain'];
-        $alternative_tlds = $params['alternative_tlds'] || [];   
+        $alternative_tlds = $params['alternative_tlds']  ?: [];
         
         
         $result = localAPI('DomainWhois', array(
