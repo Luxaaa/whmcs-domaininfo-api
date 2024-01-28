@@ -41,6 +41,7 @@ class Resolver {
         $zipped = array_map(null, $tlds_registration, $tlds_transfer, $tlds_renew);
         $items = [];
         foreach ($zipped as $tld) {
+            // filter by selection
             if(!empty($selection)) {
                 $ltd = $tld[0]->extension;
                 $plain_tld = ltrim($ltd, '.');
@@ -48,6 +49,15 @@ class Resolver {
                     continue;
                 }
             }
+            
+            // filter by group
+            if(!empty($groups)) {
+                $group = $tld[0]->group;
+                if (!in_array($group, $groups)) {
+                    continue;
+                }
+            }
+            
 
             $items[] = [
                 'tld' => $tld[0]->extension,
