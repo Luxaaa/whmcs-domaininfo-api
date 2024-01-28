@@ -34,7 +34,7 @@ function domaininfoapi_deactivate() {
 function domaininfoapi_clientarea($vars) {
 
     echo "Test";
-
+    exit;
 }
 
 
