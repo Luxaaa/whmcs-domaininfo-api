@@ -126,7 +126,8 @@ class Resolver
                 'domain' => $d,
                 'tld' => $ltd,
                 'is_available' => $res['status'] == 'available',
-                'pricing' => $pricing
+                'registration_price' => $pricing['registration'],
+                'transfer_price' => $pricing['transfer'],
             ];
 
         }
