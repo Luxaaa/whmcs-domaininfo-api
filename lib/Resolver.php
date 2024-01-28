@@ -106,8 +106,8 @@ class Resolver
         $domain_part = $domain_parts[0];
         
         $alternative_results = [];
-        foreach ($alternative_tlds as $tld) {
-            $alt_domain = $domain_part . '.' . $tld;
+        foreach ($alternative_tlds as $alt_tld) {
+            $alt_domain = $domain_part . '.' . $alt_tld;
             $alt_result = localAPI('DomainWhois', array(
                 'domain' => $alt_domain
             ));
@@ -135,9 +135,7 @@ class Resolver
             } 
         }
 
-        echo 'tld is ' . $tld;
         
-
         $resp = [
             'status' => 'success',
             'domain' => $domain,
