@@ -62,9 +62,9 @@ class Resolver {
             $items[] = [
                 'tld' => $tld[0]->extension,
                 'group' => $tld[0]->group ? $tld[0]->group : null,
-                'registration' => $tld[0]->msetupfee,
-                'transfer' => $tld[1]->msetupfee,
-                'renew' => $tld[2]->msetupfee
+                'registration' => (float) $tld[0]->msetupfee,
+                'transfer' => (float) $tld[1]->msetupfee,
+                'renew' => (float) $tld[2]->msetupfee
             ];
         }
         
