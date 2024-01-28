@@ -79,6 +79,11 @@ class Resolver
             'status' => 'success',
             'items' => $items,
         ];
+
+        if ($params['returnDataDirectly']) {
+            return $result;
+        }
+
         return $this->createJSONResponse($result);
     }
 
@@ -99,12 +104,19 @@ class Resolver
         $domain_parts = explode('.', $domain);
         $tld = implode('.', array_slice($domain_parts, -(sizeof($domain_parts) -1)));
 
-        
+        $pricingDetails = $this->domainPricing([
+            'selection' => [$tld],
+            'returnDataDirectly' => true,
+        ])['items'][0];
+
+
         $resp = [
             'status' => 'success',
             'domain' => $domain,
-            'domain_available' => $result['status'] == 'available',
+            'domain_available' =>  $result['status'] == 'available',
             'tld' => $tld,
+            'registration_price' => $pricingDetails['registration'],
+            'transfer_price' => $pricingDetails['transfer'],
         ];
         
         return $this->createJSONResponse($resp);
