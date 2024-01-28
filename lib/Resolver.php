@@ -95,10 +95,15 @@ class Resolver
             return $this->createJSONResponse(['status' => 'error', 'message' => 'Invalid domain'], 404);
         }
         
+        // get tld for domain, e.g, .com, .de' .co.uk
+        $tld = substr(strrchr($domain, "."), 1);
+        
+        
         $resp = [
             'status' => 'success',
             'domain' => $domain,
             'domain_available' => $result['status'] == 'available',
+            'tld' => $tld,
         ];
         
         return $this->createJSONResponse($resp);
