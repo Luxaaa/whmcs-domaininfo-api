@@ -118,7 +118,7 @@ class Resolver
             
             $alternative_results[] = [
                 'domain' => $alt_domain,
-                'status' => $alt_result['status'],
+                'domain_available' => $alt_result['status'] == 'available',
             ];
         }
         
@@ -135,7 +135,7 @@ class Resolver
             'domain_available' =>  $result['status'] == 'available',
             'registration_price' => $pricingDetails['registration'],
             'transfer_price' => $pricingDetails['transfer'],
-            'alternative' => $alternative_results
+            'alternatives' => $alternative_results
         ];
         
         return $this->createJSONResponse($resp);
