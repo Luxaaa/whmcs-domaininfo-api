@@ -43,8 +43,8 @@ class Resolver {
             $items[] = [
                 'tld' => $tld->extension,
                 'registration' => $tld->msetupfee,
-                'transfer' => $tlds_transfer->where('extension', $tld->extension)->first()->msetupfee,
-                'renew' => $tlds_renew->where('extension', $tld->extension)->first()->msetupfee,
+                'transfer' => 0, // $tlds_transfer->where('extension', $tld->extension)->first()->msetupfee,
+                'renew' => 0 //  $tlds_renew->where('extension', $tld->extension)->first()->msetupfee,
             ];
         }
         
