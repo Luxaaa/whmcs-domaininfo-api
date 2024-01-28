@@ -35,9 +35,12 @@ function domaininfoapi_deactivate() {
 
 // function for the public api
 function domaininfoapi_clientarea($vars) {
-
     $resolver = new Resolver();
-    echo $resolver->test();
+
+    $params = $_GET;
+
+
+    echo $resolver->resolve($params);
     exit;
 }
 

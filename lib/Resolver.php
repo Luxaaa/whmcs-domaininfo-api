@@ -10,8 +10,19 @@ class Resolver {
         return json_encode($data);
     }
 
-    function test() {
-        return $this->createJSONResponse(['status' => 'success', 'message' => 'Test']);
+    private function notFound() {
+        return $this->createJSONResponse(['status' => 'error', 'message' => 'Not Found'], 404);
+    }
+
+    function resolve($params) {
+        $endpoint = $params['endpoint'];
+
+        switch ($endpoint) {
+            case 'pricing':
+                return $this->createJSONResponse(['status' => 'success', 'data' => ['domain' => ['com' => ['register' => 10.99, 'renew' => 10.99, 'transfer' => 10.99]]]]);
+        }
+
+        return $this->notFound();
     }
 
 }
