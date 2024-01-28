@@ -90,9 +90,18 @@ class Resolver
         $result = localAPI('DomainWhois', array(
             'domain' => $domain
         ));
-        
-        return $this->createJSONResponse($result);
 
+        if ($result['result'] != 'success') {
+            return $this->createJSONResponse(['status' => 'error', 'message' => 'Invalid domain'], 404);
+        }
+        
+        $resp = [
+            'status' => 'success',
+            'domain' => $domain,
+            'domain_available' => $result['status'] == 'available',
+        ];
+        
+        return $this->createJSONResponse($resp);
 
 
     }
