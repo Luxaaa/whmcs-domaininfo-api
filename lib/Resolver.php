@@ -135,13 +135,7 @@ class Resolver
                 $mainDetails = $item;
             } else {
                 foreach ($alternative_results as $alt_item) {
-                    echo $alt_item['tld'];
-                    echo ' == ';
-                    echo ('.' . $item['tld']);
-                    echo  '    ';
-
                     if('.' . ($alt_item['tld']) == $item['tld']) {
-                        echo "item found ";
                         $alt_item['registration_price'] = $item['registration'];
                         $alt_item['transfer_price'] = $item['transfer'];
                     }
