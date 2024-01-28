@@ -88,10 +88,10 @@ class Resolver
 
         // use the domain module for the tld to get the status
         $result = localAPI('DomainWhois', array(
-            'domain' => $domain,
+            'domain' => $domain
         ));
         
-        return $this->.$this->createJSONResponse($result);
+        return $this->createJSONResponse($result);
 
 
 
