@@ -130,7 +130,7 @@ class Resolver
         
         $mainDetails = null;
         foreach ($pricingDetails as $item) {
-            if ($item->extension == $tld) {
+            if ($item->extension == ('.' . $tld)) {
                 $mainDetails = $item;
             } 
         }
