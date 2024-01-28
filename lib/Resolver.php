@@ -126,15 +126,22 @@ class Resolver
         $pricingDetails = $this->domainPricing([
             'selection' => [$tld, ...$alternative_tlds],
             'returnDataDirectly' => true,
-        ])['items'][0];
-
+        ])['items'];
+        
+        $mainDetails = null;
+        foreach ($pricingDetails as $item) {
+            if ($item->extension == $tld) {
+                $mainDetails = $item
+            } 
+        }
+        
 
         $resp = [
             'status' => 'success',
             'domain' => $domain,
             'domain_available' =>  $result['status'] == 'available',
-            'registration_price' => $pricingDetails['registration'],
-            'transfer_price' => $pricingDetails['transfer'],
+            'registration_price' => $mainDetails['registration'],
+            'transfer_price' => $mainDetails['transfer'],
             'alternatives' => $alternative_results
         ];
         
