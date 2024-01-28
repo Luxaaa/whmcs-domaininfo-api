@@ -90,8 +90,9 @@ class Resolver
     function domainStatus($params)
     {
         $domain = $params['domain'];
-
-        // use the domain module for the tld to get the status
+        $alternative_tlds = $params['alternative_tlds'] || [];   
+        
+        
         $result = localAPI('DomainWhois', array(
             'domain' => $domain
         ));
@@ -99,13 +100,31 @@ class Resolver
         if ($result['result'] != 'success') {
             return $this->createJSONResponse(['status' => 'error', 'message' => 'Invalid domain'], 404);
         }
-        
-        // get tld from domain
+
         $domain_parts = explode('.', $domain);
         $tld = implode('.', array_slice($domain_parts, -(sizeof($domain_parts) -1)));
+        $domain_part = $domain_parts[0];
+        
+        $alternative_results = [];
+        foreach ($alternative_tlds as $tld) {
+            $alt_domain = $domain_part . '.' . $tld;
+            $alt_result = localAPI('DomainWhois', array(
+                'domain' => $alt_domain
+            ));
 
+            if ($alt_result['result'] != 'success') {
+                return $this->createJSONResponse(['status' => 'error', 'message' => 'Invalid domain'], 404);
+            }
+            
+            $alternative_results[] = [
+                'domain' => $alt_domain,
+                'status' => $alt_result['status'],
+            ];
+        }
+        
+        
         $pricingDetails = $this->domainPricing([
-            'selection' => [$tld],
+            'selection' => [$tld, ...$alternative_tlds],
             'returnDataDirectly' => true,
         ])['items'][0];
 
@@ -114,9 +133,9 @@ class Resolver
             'status' => 'success',
             'domain' => $domain,
             'domain_available' =>  $result['status'] == 'available',
-            'tld' => $tld,
             'registration_price' => $pricingDetails['registration'],
             'transfer_price' => $pricingDetails['transfer'],
+            'alternative': $alternative_results
         ];
         
         return $this->createJSONResponse($resp);
