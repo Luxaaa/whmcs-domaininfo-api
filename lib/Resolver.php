@@ -86,7 +86,7 @@ class Resolver
 
         return $this->createJSONResponse($result);
     }
-
+    
     function domainStatus($params)
     {
         $domain = $params['domain'];
@@ -97,7 +97,6 @@ class Resolver
         $main_tld = implode('.', array_slice($domain_parts, -(sizeof($domain_parts) -1)));
 
         $all_tlds = array_unique([$main_tld, ...$alternative_tlds]);
-
 
         $pricingDetails = $this->domainPricing([
             'selection' => $all_tlds,
@@ -142,7 +141,6 @@ class Resolver
             }
         }
 
-        
         $resp = [
             'status' => 'success',
             'domain' => $requested,
