@@ -13,6 +13,10 @@ class Resolver
     private function createJSONResponse($data, $status = 200)
     {
         header('Content-Type: application/json');
+        // CORS
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Methods: GET');
+
         http_response_code($status);
         return json_encode($data);
     }
