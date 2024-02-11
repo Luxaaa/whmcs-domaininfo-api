@@ -95,13 +95,13 @@ class Resolver
     {
         $domain = $params['domain'];
         $alternative_tlds = $params['alternative_tlds']  ?: [];
-
+        // split input domain into name and tld
         $domain_parts = explode('.', $domain);
         $domain_part = $domain_parts[0];
         $main_tld = implode('.', array_slice($domain_parts, -(sizeof($domain_parts) -1)));
-
+        // input domain tld + alternative tlds
         $all_tlds = array_unique([$main_tld, ...$alternative_tlds]);
-
+        // get pricing details for tlds
         $pricingDetails = $this->domainPricing([
             'selection' => $all_tlds,
             'returnDataDirectly' => true,
@@ -109,15 +109,16 @@ class Resolver
 
         $results = [];
         foreach ($all_tlds as $ltd) {
+            // check if domain is available
             $d = $domain_part . '.' . $ltd;
             $res = localAPI('DomainWhois', array(
                 'domain' => $d
             ));
-
+            // if domain is not valid, skip it
             if ($res['result'] != 'success') {
-                return $this->createJSONResponse(['status' => 'error', 'message' => 'Invalid domain'], 404);
+                continue;
             }
-
+            // fiind pricnig
             $pricing = null;
             foreach ($pricingDetails as $pricing_item) {
                 if (('.' . $ltd) == $pricing_item['tld']) {
@@ -131,10 +132,11 @@ class Resolver
                 'is_available' => $res['status'] == 'available',
                 'registration_price' => $pricing['registration'],
                 'transfer_price' => $pricing['transfer'],
+                'whois_result' => $res,
             ];
 
         }
-
+        // find data for input domain and alternatives
         $requested = null;
         $alternatives = null;
         foreach ($results as $item) {
@@ -145,6 +147,7 @@ class Resolver
             }
         }
 
+        // create response
         $resp = [
             'status' => 'success',
             'domain' => $requested,
