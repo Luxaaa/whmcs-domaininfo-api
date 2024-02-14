@@ -21,5 +21,10 @@ function find_registrar_for_tld($ltd): ?string
     if(!$config) return null;
 
     return $config->autoreg;
+}
 
+function is_domain_available($domain, $registrar) {
+    // call is_available function of the registrar
+    $res = call_user_func('\\WHMCS\\Module\\Registrar\\' . $registrar . '\\' . $registrar . '_CheckAvailability', $domain);
+    return $res;
 }
