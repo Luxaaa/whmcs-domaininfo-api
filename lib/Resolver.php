@@ -112,15 +112,8 @@ class Resolver
         foreach ($all_tlds as $tld) {
             // check if domain is available
             $d = $domain_part . '.' . $tld;
-            $res = localAPI('DomainWhois', array(
-                'domain' => $d
-            ));
-            // if domain is not valid, skip it
-            if ($res['result'] != 'success') {
-                continue;
-            }
-
             $registrar = find_registrar_for_tld($tld);
+            $is_available = is_domain_available($domain_part, $tld, $registrar);
 
             // find pricing
             $pricing = null;
@@ -133,11 +126,9 @@ class Resolver
             $results[] = [
                 'domain' => $d,
                 'tld' => $tld,
-                'is_available' => $res['status'] == 'available',
+                'is_available' => $is_available,
                 'registration_price' => $pricing['registration'],
                 'transfer_price' => $pricing['transfer'],
-                'registrar' => $registrar,
-                'reg_status' => is_domain_available($domain_part, $tld, $registrar)
             ];
 
         }
