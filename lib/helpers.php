@@ -41,7 +41,7 @@ function is_domain_available($sld, $tld, $registrar) {
     // prepare params
     $params = _get_config_for_registrar($registrar);
     echo 'start config';
-    echo print_r($config_res, );
+    echo print_r($params);
     echo 'end conig <br>';
     echo '<br>';
 
@@ -49,6 +49,5 @@ function is_domain_available($sld, $tld, $registrar) {
     $params['sld'] = $sld;
     $params['tlds'] = [$tld];
 
-    $res = call_user_func($registrar . '_CheckAvailability', $params);
-    return $res;
+    return call_user_func($registrar . '_CheckAvailability', $params);
 }
