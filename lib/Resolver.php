@@ -6,6 +6,7 @@ use WHMCS\Database\Capsule;
 
 require_once 'init.php';
 
+require_once 'helpers.php';
 
 class Resolver
 {
@@ -118,7 +119,10 @@ class Resolver
             if ($res['result'] != 'success') {
                 continue;
             }
-            // fiind pricnig
+
+            $registrar = find_registrar_for_tld($ltd);
+
+            // find pricing
             $pricing = null;
             foreach ($pricingDetails as $pricing_item) {
                 if (('.' . $ltd) == $pricing_item['tld']) {
@@ -132,7 +136,7 @@ class Resolver
                 'is_available' => $res['status'] == 'available',
                 'registration_price' => $pricing['registration'],
                 'transfer_price' => $pricing['transfer'],
-                'whois_result' => $res,
+                'registrar' => $registrar
             ];
 
         }
