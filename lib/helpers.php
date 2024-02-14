@@ -60,6 +60,12 @@ function is_domain_available($sld, $tld, $registrar) {
 
     try {
         $result =  call_user_func($registrar . '_CheckAvailability', $params)->toArray();
+        echo $result['status'] == 'available for registration';
+        echo '<br/>';
+        echo $result['status'];
+        echo '<br/>';
+        echo '<br/>';
+
         return $result['status'] == 'available for registration';
     } catch (Exception) {
         return false;
