@@ -58,5 +58,8 @@ function is_domain_available($sld, $tld, $registrar) {
     $params['sld'] = $sld;
     $params['tlds'] = ['.' . $tld];
 
-    return call_user_func($registrar . '_CheckAvailability', $params);
+    $result =  call_user_func($registrar . '_CheckAvailability', $params);
+    echo print_r($result, true);
+    echo '<br/>';
+    return $result;
 }
