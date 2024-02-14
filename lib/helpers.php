@@ -23,17 +23,23 @@ function find_registrar_for_tld($ltd): ?string
     return $config->autoreg;
 }
 
+function _get_config_for_registrar($registrar) {
+    $result = Capsule::table('tblregistrars')
+        ->where('registrar', $registrar)
+        ->get();
+    $result = [];
+    foreach ($result as $row) {
+        $result[$row->setting] = $row->value;
+    }
+    return $result;
+}
+
 function is_domain_available($sld, $tld, $registrar) {
     // include registrar file
     require_once __DIR__ . '/../../../registrars/' . $registrar . '/' . $registrar . '.php';
 
     // prepare params
-    $params = [];
-    // get module config
-    $config_res = localAPI('GetModuleConfigurationParameters', [
-        'moduleType' => 'registrar',
-        'moduleName' => $registrar,
-    ]);
+    $params = _get_config_for_registrar($registrar);
     echo 'start config';
     echo print_r($config_res, );
     echo 'end conig <br>';
