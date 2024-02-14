@@ -24,11 +24,11 @@ function find_registrar_for_tld($ltd): ?string
 }
 
 function _get_config_for_registrar($registrar) {
-    $result = Capsule::table('tblregistrars')
+    $rows = Capsule::table('tblregistrars')
         ->where('registrar', $registrar)
         ->get();
     $result = [];
-    foreach ($result as $row) {
+    foreach ($rows as $row) {
         $result[$row->setting] = $row->value;
     }
     return $result;
