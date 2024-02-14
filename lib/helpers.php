@@ -28,8 +28,15 @@ function is_domain_available($sld, $tld, $registrar) {
     require_once __DIR__ . '/../../../registrars/' . $registrar . '/' . $registrar . '.php';
 
     // prepare params
-    $module_config = call_user_func($registrar . '_getConfigArray');
-    $params = $module_config;
+    $params = [];
+    // get module config
+    $config_res = localAPI('GetModuleConfigurationParameters', [
+        'moduleType' => 'registrar',
+        'moduleName' => $registrar,
+    ]);
+    echo print_r($config_res, true);
+    echo '<br>';
+    echo '<br>';
 
     $params['searchTerm'] = $sld . '.' . $tld;
     $params['sld'] = $sld;
