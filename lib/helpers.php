@@ -34,8 +34,9 @@ function is_domain_available($sld, $tld, $registrar) {
         'moduleType' => 'registrar',
         'moduleName' => $registrar,
     ]);
-    echo print_r($config_res, true);
-    echo '<br>';
+    echo 'start config';
+    echo print_r($config_res, );
+    echo 'end conig <br>';
     echo '<br>';
 
     $params['searchTerm'] = $sld . '.' . $tld;
