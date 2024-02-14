@@ -109,9 +109,9 @@ class Resolver
         ])['items'];
 
         $results = [];
-        foreach ($all_tlds as $ltd) {
+        foreach ($all_tlds as $tld) {
             // check if domain is available
-            $d = $domain_part . '.' . $ltd;
+            $d = $domain_part . '.' . $tld;
             $res = localAPI('DomainWhois', array(
                 'domain' => $d
             ));
@@ -120,24 +120,24 @@ class Resolver
                 continue;
             }
 
-            $registrar = find_registrar_for_tld($ltd);
+            $registrar = find_registrar_for_tld($tld);
 
             // find pricing
             $pricing = null;
             foreach ($pricingDetails as $pricing_item) {
-                if (('.' . $ltd) == $pricing_item['tld']) {
+                if (('.' . $tld) == $pricing_item['tld']) {
                     $pricing = $pricing_item;
                 }
             }
 
             $results[] = [
                 'domain' => $d,
-                'tld' => $ltd,
+                'tld' => $tld,
                 'is_available' => $res['status'] == 'available',
                 'registration_price' => $pricing['registration'],
                 'transfer_price' => $pricing['transfer'],
                 'registrar' => $registrar,
-                'reg_status' => is_domain_available($d, $registrar)
+                'reg_status' => is_domain_available($domain_part, $tld, $registrar)
             ];
 
         }

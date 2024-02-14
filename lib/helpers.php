@@ -23,13 +23,15 @@ function find_registrar_for_tld($ltd): ?string
     return $config->autoreg;
 }
 
-function is_domain_available($domain, $registrar) {
+function is_domain_available($sld, $tld, $registrar) {
     // include registrar file
     require_once __DIR__ . '/../../../registrars/' . $registrar . '/' . $registrar . '.php';
 
     // prepare params
     $params = call_user_func($registrar . '_getConfigArray');
-    $params['searchTerm'] = $domain;
+    $params['searchTerm'] = $sld . '.' . $tld;
+    $params['sld'] = $sld;
+    $params['tlds'] = [$tld];
 
     $res = call_user_func($registrar . '_CheckAvailability', $params);
     return $res;
