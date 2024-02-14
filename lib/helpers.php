@@ -36,8 +36,8 @@ function _get_config_for_registrar($registrar) {
         // if field is a password, decript it
         $is_pw = $fields[$row->setting]['Type'] === 'password';
         if($is_pw) {
-            $descrpt_res = localAPI('DecryptPassword', ['password2' => $row->value]);
-            $result[$row->setting] = $descrpt_res['password'];
+            $decrypt_res = localAPI('DecryptPassword', ['password2' => $row->value]);
+            $result[$row->setting] = $decrypt_res['password'];
 
         } else {
             $result[$row->setting] = $row->value;
@@ -56,7 +56,7 @@ function is_domain_available($sld, $tld, $registrar) {
 
     $params['searchTerm'] = $sld . '.' . $tld;
     $params['sld'] = $sld;
-    $params['tlds'] = [$tld];
+    $params['tlds'] = ['.' . $tld];
 
     return call_user_func($registrar . '_CheckAvailability', $params);
 }
