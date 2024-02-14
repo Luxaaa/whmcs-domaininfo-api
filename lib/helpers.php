@@ -24,12 +24,25 @@ function find_registrar_for_tld($ltd): ?string
 }
 
 function _get_config_for_registrar($registrar) {
+    // get config fields
+    $fields = call_user_func($registrar . '_GetConfigArray');
+
+    // get settnigs values
     $rows = Capsule::table('tblregistrars')
         ->where('registrar', $registrar)
         ->get();
     $result = [];
     foreach ($rows as $row) {
-        $result[$row->setting] = $row->value;
+        // if field is a password, decript it
+        $is_pw = $fields[$row->setting]['Type'] === 'password';
+        if($is_pw) {
+            $descrpt_res = localAPI('DecryptPassword', ['password2' => $row->value]);
+            $result[$row->setting] = $descrpt_res['password'];
+
+        } else {
+            $result[$row->setting] = $row->value;
+        }
+
     }
     return $result;
 }
