@@ -25,7 +25,7 @@ function find_registrar_for_tld($ltd): ?string
 
 function is_domain_available($domain, $registrar) {
     // call is_available function of the registrar
-    require_once __DIR__ . '/../../registrars/' . $registrar . '/' . $registrar . '.php';
+    require_once __DIR__ . '/../../../registrars/' . $registrar . '/' . $registrar . '.php';
     $res = call_user_func($registrar . '_CheckAvailability', $domain);
     return $res;
 }
