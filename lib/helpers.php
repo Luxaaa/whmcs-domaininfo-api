@@ -29,10 +29,7 @@ function is_domain_available($sld, $tld, $registrar) {
 
     // prepare params
     $module_config = call_user_func($registrar . '_getConfigArray');
-    $params = [];
-    foreach ($module_config as $key => $item) {
-        $params[$key] = $item['Value'];
-    }
+    $params = $module_config;
 
     $params['searchTerm'] = $sld . '.' . $tld;
     $params['sld'] = $sld;
