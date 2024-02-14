@@ -115,6 +115,7 @@ class Resolver
             $res = localAPI('DomainWhois', array(
                 'domain' => $d
             ));
+            echo print_r($res, true);
             // if domain is not valid, skip it
             if ($res['result'] != 'success') {
                 continue;
