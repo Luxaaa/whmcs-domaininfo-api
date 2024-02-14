@@ -40,10 +40,6 @@ function is_domain_available($sld, $tld, $registrar) {
 
     // prepare params
     $params = _get_config_for_registrar($registrar);
-    echo 'start config';
-    echo print_r($params, true);
-    echo 'end conig <br>';
-    echo '<br>';
 
     $params['searchTerm'] = $sld . '.' . $tld;
     $params['sld'] = $sld;
