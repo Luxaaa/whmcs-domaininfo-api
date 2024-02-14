@@ -137,7 +137,7 @@ class Resolver
                 'registration_price' => $pricing['registration'],
                 'transfer_price' => $pricing['transfer'],
                 'registrar' => $registrar,
-                'reg_status' => is_domain_available($registrar, $d)
+                'reg_status' => is_domain_available($d, $registrar)
             ];
 
         }
