@@ -28,7 +28,12 @@ function is_domain_available($sld, $tld, $registrar) {
     require_once __DIR__ . '/../../../registrars/' . $registrar . '/' . $registrar . '.php';
 
     // prepare params
-    $params = call_user_func($registrar . '_getConfigArray');
+    $module_config = call_user_func($registrar . '_getConfigArray');
+    $params = [];
+    foreach ($module_config as $key => $item) {
+        $params[$key] = $item['Value'];
+    }
+
     $params['searchTerm'] = $sld . '.' . $tld;
     $params['sld'] = $sld;
     $params['tlds'] = [$tld];
